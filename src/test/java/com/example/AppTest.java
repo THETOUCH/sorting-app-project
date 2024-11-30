@@ -3,9 +3,33 @@ package com.example;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 public class AppTest {
+
+    @ParameterizedTest
+    @MethodSource("testCases")
+    void parametrizedTaskTest(String[] input, String expected) {
+        String actual = Arrays.toString(App.sortNumbers(input));
+        Assertions.assertEquals(expected, actual);
+    }
+
+    static Stream<Arguments> testCases() {
+        return Stream.of(
+                Arguments.of(new String[]{"5", "3", "1", "4", "2"}, "[1, 2, 3, 4, 5]"),
+                Arguments.of(new String[]{"10", "8", "9"}, "[8, 9, 10]"),
+                Arguments.of(new String[]{"-1", "0", "1"}, "[-1, 0, 1]"),
+                Arguments.of(new String[]{}, "[]"),
+                Arguments.of(new String[]{"100"}, "[100]")
+        );
+    }
 
     @Test
     public void testSortNumbers_WithValidInput() {
